@@ -62,7 +62,7 @@ class Tab
         $fields = $this->collectFields();
         $layout = $this->collectColumnLayout();
 
-        $id = $id ?: ('tab-form-'.($this->tabs->count() + 1).'-'.mt_rand(0, 9999));
+        $id = $id ?: ('tab-form-'.($this->tabs->count() + 1));
 
         $this->tabs->push(compact('id', 'title', 'fields', 'active', 'layout'));
 
@@ -192,6 +192,9 @@ class Tab
     if (hash) {
         $('#$elementId .nav-tabs a[href="' + hash + '"]').tab('show');
     }
+
+    $('#$elementId .nav-tabs a[href="' + hash + '"]').tab('show');
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 
     // Change hash for page-reload
     $('#$elementId .nav-tabs a').on('shown.bs.tab', function (e) {
