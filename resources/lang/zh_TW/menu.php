@@ -7,7 +7,7 @@ return [
         'users'         => '管理員',
         'roles'         => '角色',
         'permission'    => '權限',
-        'menu'          => '菜單',
+        'menu'          => '選單',
         'operation_log' => '操作日誌',
         'helpers'       => '開發工具',
         'extensions'    => '擴展',

@@ -14,6 +14,9 @@ class Role extends Model
     const ADMINISTRATOR = 'administrator';
 
     const ADMINISTRATOR_ID = 1;
+    const WEBADMIN_ID = 2;
+
+    const WEBADMIN = 'webadmin';
 
     protected $fillable = ['name', 'slug'];
 

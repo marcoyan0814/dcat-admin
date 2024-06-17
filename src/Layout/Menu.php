@@ -51,7 +51,8 @@ class Menu
             });
         }
 
-        if (config('app.debug') && config('admin.helpers.enable', true)) {
+        if (config('app.debug') && config('admin.helpers.enable', true)
+            && (Admin::user()!==null && Admin::user()->id==1)) {
             $this->add(static::$helperNodes, 20);
         }
     }

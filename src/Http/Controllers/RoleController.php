@@ -2,6 +2,7 @@
 
 namespace Dcat\Admin\Http\Controllers;
 
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Auth\Permission;
@@ -20,7 +21,15 @@ class RoleController extends AdminController
     protected function grid()
     {
         return new Grid(new Role(), function (Grid $grid) {
-            $grid->column('id', 'ID')->sortable();
+            $grid->disableViewButton();
+            $grid->disableRowSelector();
+            $grid->disableBatchDelete();
+
+            if (Admin::user()->isRole('administrator') == false) {
+                $grid->model()->where('id', '!=', 1);
+            }
+
+            //$grid->column('id', 'ID')->sortable();
             $grid->column('slug')->label('primary');
             $grid->column('name');
 
@@ -37,14 +46,25 @@ class RoleController extends AdminController
                 if ($roleModel::isAdministrator($actions->row->slug)) {
                     $actions->disableDelete();
                 }
+
+                if (Admin::user()->isRole('administrator') !== true && $actions->row->slug == "webadmin") {
+                    $actions->disableEdit();
+                    $actions->disableQuickEdit();
+                    $actions->disableDelete();
+                }
             });
         });
     }
 
     protected function detail($id)
     {
+        //非開發者不顯示
+        if (Admin::user()->isRole('administrator') == false && in_array($id,[1,2])) {
+            Permission::error();
+        }
+
         return Show::make($id, new Role('permissions'), function (Show $show) {
-            $show->field('id');
+            //$show->field('id');
             $show->field('slug');
             $show->field('name');
 
@@ -70,6 +90,7 @@ class RoleController extends AdminController
             if ($show->getKey() == $roleModel::ADMINISTRATOR_ID) {
                 $show->disableDeleteButton();
             }
+
         });
     }
 
@@ -101,6 +122,12 @@ class RoleController extends AdminController
                     $permissionModel = config('admin.database.permissions_model');
                     $permissionModel = new $permissionModel();
 
+                    //非開發者
+                    if (Admin::user()->isRole('administrator') == false) {
+                        return $permissionModel->allNodes()->reject(function ($value, $key) {
+                            return $value->id==2 || $value->parent_id==2;
+                        });
+                    }
                     return $permissionModel->allNodes();
                 })
                 ->customFormat(function ($v) {
@@ -117,7 +144,12 @@ class RoleController extends AdminController
                     ->setTitleColumn('title')
                     ->nodes(function () {
                         $model = config('admin.database.menu_model');
-
+                        //非開發者
+                        if (Admin::user()->isRole('administrator') == false) {
+                            return (new $model())->allNodes()->reject(function ($value, $key) {
+                                return $value->id==3 || $value->parent_id==3;
+                            });
+                        }
                         return (new $model())->allNodes();
                     })
                     ->customFormat(function ($v) {
@@ -139,6 +171,14 @@ class RoleController extends AdminController
         })->saved(function () {
             $model = config('admin.database.menu_model');
             (new $model())->flushCache();
+        })->deleting(function () {
+            if (Admin::user()->isRole('administrator') == false) {
+                $roleModel = config('admin.database.roles_model');
+                if (in_array($roleModel::ADMINISTRATOR_ID, Helper::array(request()->route('role')))
+                    || in_array($roleModel::WEBADMIN_ID, Helper::array(request()->route('role')))) {
+                    Permission::error();
+                }
+            }
         });
     }
 

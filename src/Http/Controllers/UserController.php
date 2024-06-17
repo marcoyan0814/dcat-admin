@@ -2,6 +2,7 @@
 
 namespace Dcat\Admin\Http\Controllers;
 
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Auth\Permission;
@@ -21,15 +22,24 @@ class UserController extends AdminController
     protected function grid()
     {
         return Grid::make(Administrator::with(['roles']), function (Grid $grid) {
+            $grid->disableViewButton();
+
+            if (Admin::user()->isRole('administrator') == false) {
+                $grid->model()->where('id', '!=', 1);
+            }
+
+            $grid->disableRowSelector();
+            $grid->disableBatchDelete();
             $grid->column('id', 'ID')->sortable();
             $grid->column('username');
             $grid->column('name');
 
-            if (config('admin.permission.enable')) {
+            if (config('admin.permission.enable') && Admin::user()->isRole('administrator')) {
                 $grid->column('roles')->pluck('name')->label('primary', 3);
 
                 $permissionModel = config('admin.database.permissions_model');
                 $roleModel = config('admin.database.roles_model');
+
                 $nodes = (new $permissionModel())->allNodes();
                 $grid->column('permissions')
                     ->if(function () {
@@ -48,6 +58,15 @@ class UserController extends AdminController
                     ->display('');
             }
 
+
+            $grid->column('status', __('admin.status'))
+                ->if(function () {
+                    return ($this->id == Admin::user()->id);
+                })
+                ->display('')
+                ->else()
+                ->switch('',false);
+
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
@@ -59,7 +78,7 @@ class UserController extends AdminController
             $grid->disableEditButton();
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
-                if ($actions->getKey() == AdministratorModel::DEFAULT_ID) {
+                if ($actions->getKey() == AdministratorModel::DEFAULT_ID || $actions->row->id == Admin::user()->id) {
                     $actions->disableDelete();
                 }
             });
@@ -68,6 +87,10 @@ class UserController extends AdminController
 
     protected function detail($id)
     {
+        //非開發者不顯示
+        if (Admin::user()->isRole('administrator') == false && $id == 1) {
+            Permission::error();
+        }
         return Show::make($id, Administrator::with(['roles']), function (Show $show) {
             $show->field('id');
             $show->field('username');
@@ -121,6 +144,11 @@ class UserController extends AdminController
     public function form()
     {
         return Form::make(Administrator::with(['roles']), function (Form $form) {
+            //非開發者不顯示
+            if (Admin::user()->isRole('administrator') == false && $form->getKey() == 1) {
+                Permission::error();
+            }
+
             $userTable = config('admin.database.users_table');
 
             $connection = config('admin.database.connection');
@@ -154,16 +182,28 @@ class UserController extends AdminController
 
             $form->ignore(['password_confirmation']);
 
-            if (config('admin.permission.enable')) {
+            if (config('admin.permission.enable') && Admin::user()->inRoles(['administrator', 'webadmin'])) {
                 $form->multipleSelect('roles', trans('admin.roles'))
                     ->options(function () {
                         $roleModel = config('admin.database.roles_model');
-
+                        //非開發者不顯示administrator
+                        if (Admin::user()->isRole('administrator') !== true) {
+                            return $roleModel::all()->where('slug', '!=', 'administrator')->pluck('name', 'id');
+                        }
                         return $roleModel::all()->pluck('name', 'id');
                     })
                     ->customFormat(function ($v) {
                         return array_column($v, 'id');
-                    });
+                    })
+                    ->default(2);
+            }
+
+            //不為自己才可以改狀態
+            if ($id != Admin::user()->id) {
+                $form->switch('status', __('admin.status'))
+                    ->default(1);
+            } else {
+                $form->disableDeleteButton();
             }
 
             $form->display('created_at', trans('admin.created_at'));
@@ -172,6 +212,7 @@ class UserController extends AdminController
             if ($id == AdministratorModel::DEFAULT_ID) {
                 $form->disableDeleteButton();
             }
+
         })->saving(function (Form $form) {
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = bcrypt($form->password);

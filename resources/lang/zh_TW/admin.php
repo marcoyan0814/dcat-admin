@@ -49,6 +49,7 @@ return [
     'login'                 => '登入',
     'logout'                => '登出',
     'setting'               => '設置',
+    'status'                => '狀態',
     'name'                  => '名稱',
     'username'              => '用戶名',
     'old_password'          => '舊密碼',

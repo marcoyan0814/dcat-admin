@@ -30,6 +30,7 @@ class CreateAdminTables extends Migration
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->string('remember_token', 100)->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
 
@@ -58,7 +59,7 @@ class CreateAdminTables extends Migration
             $table->string('title', 50);
             $table->string('icon', 50)->nullable();
             $table->string('uri', 50)->nullable();
-
+            $table->string('target')->default('_self');
             $table->timestamps();
         });
 

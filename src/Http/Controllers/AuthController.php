@@ -50,7 +50,7 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-        $credentials = $request->only([$this->username(), 'password']);
+        $credentials = array_merge($request->only([$this->username(), 'password']),['status'=>1]);
         $remember = (bool) $request->input('remember', false);
 
         /** @var \Illuminate\Validation\Validator $validator */

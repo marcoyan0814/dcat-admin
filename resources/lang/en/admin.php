@@ -47,6 +47,7 @@ return [
     'login'                 => 'Login',
     'logout'                => 'Logout',
     'setting'               => 'Setting',
+    'status'                => 'Status',
     'name'                  => 'Name',
     'username'              => 'Username',
     'user'                  => 'User',

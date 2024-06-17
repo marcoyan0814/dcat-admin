@@ -25,7 +25,7 @@ class Administrator extends Model implements AuthenticatableContract, Authorizab
 
     const DEFAULT_ID = 1;
 
-    protected $fillable = ['username', 'password', 'name', 'avatar'];
+    protected $fillable = ['username', 'password', 'name', 'avatar', 'status'];
 
     /**
      * Create a new Eloquent model instance.
