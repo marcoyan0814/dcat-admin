@@ -39,6 +39,7 @@ class MenuController extends AdminController
                     $form->text('title', trans('admin.title'))->required();
                     $form->icon('icon', trans('admin.icon'))->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
+                    $form->select('target',__('admin.target'))->options(['_self'=>'_self','_blank'=>'_blank'])->default('_self');
 
                     if ($menuModel::withRole()) {
                         $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
@@ -123,6 +124,7 @@ class MenuController extends AdminController
             $form->icon('icon', trans('admin.icon'))->help($this->iconHelp());
             $form->text('uri', trans('admin.uri'));
             $form->switch('show', trans('admin.show'));
+            $form->select('target',__('admin.target'))->options(['_self'=>'_self','_blank'=>'_blank'])->default('_self');
 
             if ($menuModel::withRole()) {
                 $form->multipleSelect('roles', trans('admin.roles'))

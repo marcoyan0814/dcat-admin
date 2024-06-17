@@ -48,6 +48,7 @@ return [
     'logout'                => 'Logout',
     'setting'               => 'Setting',
     'status'                => 'Status',
+    'target'                => 'Open Window',
     'name'                  => 'Name',
     'username'              => 'Username',
     'user'                  => 'User',

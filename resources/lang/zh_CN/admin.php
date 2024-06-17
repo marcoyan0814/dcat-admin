@@ -50,6 +50,7 @@ return [
     'logout'                => '登出',
     'setting'               => '设置',
     'status'                => '狀態',
+    'target'                => '視窗開啟方式',
     'name'                  => '名称',
     'username'              => '用户名',
     'old_password'          => '旧密码',
