@@ -96,7 +96,7 @@ class UserController extends AdminController
             $show->field('username');
             $show->field('name');
 
-            $show->field('avatar', __('admin.avatar'))->image();
+//            $show->field('avatar', __('admin.avatar'))->image();
 
             if (config('admin.permission.enable')) {
                 $show->field('roles')->as(function ($roles) {
@@ -162,7 +162,7 @@ class UserController extends AdminController
                 ->creationRules(['required', "unique:{$connection}.{$userTable}"])
                 ->updateRules(['required', "unique:{$connection}.{$userTable},username,$id"]);
             $form->text('name', trans('admin.name'))->required();
-            $form->image('avatar', trans('admin.avatar'))->autoUpload();
+//            $form->image('avatar', trans('admin.avatar'))->autoUpload();
 
             if ($id) {
                 $form->password('password', trans('admin.password'))
