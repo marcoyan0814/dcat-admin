@@ -30,7 +30,11 @@ class UserController extends AdminController
 
             $grid->disableRowSelector();
             $grid->disableBatchDelete();
-            $grid->column('id', 'ID')->sortable();
+            if (Admin::user()->isRole('administrator')) {
+                $grid->column('id', 'ID')->sortable();
+            }else{
+	        $grid->number();
+            }
             $grid->column('username');
             $grid->column('name');
 
