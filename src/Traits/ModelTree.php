@@ -319,7 +319,13 @@ trait ModelTree
             if ($node[$this->getParentColumn()] == $parentId) {
                 $currentPrefix = $this->hasNextSibling($nodes, $node[$this->getParentColumn()], $index) ? $prefix : str_replace($d, '└─', $prefix);
 
-                $node[$this->getTitleColumn()] = $currentPrefix.$space.$node[$this->getTitleColumn()];
+                if(is_array($node[$this->getTitleColumn()]))
+                {
+                    $node[$this->getTitleColumn()] = $currentPrefix.$space.$node[$this->getTitleColumn()]['zh_TW'];
+                }
+                else {
+                    $node[$this->getTitleColumn()] = $currentPrefix.$space.$node[$this->getTitleColumn()];
+                }
 
                 $childrenPrefix = str_replace($d, str_repeat($space, 6), $prefix).$d.str_replace([$d, $space], '', $prefix);
 
