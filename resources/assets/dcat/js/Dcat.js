@@ -21,6 +21,7 @@ export default class Dcat {
         new Helpers(this);
 
         this.withConfig(config);
+
     }
 
     /**

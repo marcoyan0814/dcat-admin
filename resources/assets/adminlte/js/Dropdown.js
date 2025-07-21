@@ -83,7 +83,7 @@ const Dropdown = (($) => {
             elm.css('right', 0)
           }
         }
-      }  
+      }
     }
 
     // Static

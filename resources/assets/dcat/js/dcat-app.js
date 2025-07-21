@@ -95,6 +95,9 @@ function listen(Dcat) {
         new Footer(Dcat);
         // data-action 动作绑定(包括删除、批量删除等操作)
         new DataActions(Dcat);
+
+        // 手動監聽選單事件
+        $('[data-widget="treeview"]').Treeview('init')
     });
 
     // 每个请求都初始化

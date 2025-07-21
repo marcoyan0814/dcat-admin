@@ -78,6 +78,9 @@ body.sidebar-collapse {
     font-size: 1.04rem;
     border-radius: .1rem;
   }
+  .nav .nav-item .nav-link {
+    padding: 10px 10px 10px 25px!important;
+  }
 }
 
 .nav-pills .nav-link:not(.active):hover {

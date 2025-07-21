@@ -710,7 +710,6 @@ class Asset
         $this->mergeBaseJs();
 
         $html = '';
-
         foreach (array_unique($this->js) as &$v) {
             if (! $paths = $this->get($v, 'js')) {
                 continue;

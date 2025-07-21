@@ -222,7 +222,8 @@ select.form-control:not([multiple=multiple]) {
   .select2-container--classic .select2-selection--single, .select2-container--default .select2-selection--single {
     min-height: 31px;
     padding: 1px 2px;
-    font-size: 0.7rem;
+    font-size: .9rem;
+
   }
 
   .select2-selection .default-text {

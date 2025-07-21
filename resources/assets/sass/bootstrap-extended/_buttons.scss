@@ -1,6 +1,8 @@
 // var for boxshadow of gradient buttons
 // Buttons
 .btn {
+  border-width: 1px;
+
   // to change cursor of disabled button
   &:disabled{
     cursor: default;

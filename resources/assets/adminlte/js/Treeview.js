@@ -110,7 +110,7 @@ const Treeview = (($) => {
           return
         }
       }
-      
+
       event.preventDefault()
 
       const parentLi = $relativeTarget.parents(Selector.LI).first()
@@ -160,7 +160,6 @@ const Treeview = (($) => {
    * Data API
    * ====================================================
    */
-
   $(window).on(Event.LOAD_DATA_API, () => {
     $(Selector.DATA_WIDGET).each(function () {
       Treeview._jQueryInterface.call($(this), 'init')

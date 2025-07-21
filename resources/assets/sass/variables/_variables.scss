@@ -257,3 +257,8 @@ $vs-radio-box: 18px;
 $vs-radio-box-sm: 13px;
 $vs-radio-box-lg: 22px;
 
+// Custom file input variables
+// Define missing Bootstrap variables for backwards compatibility
+$input-padding-x: 0.75rem !default;
+$custom-file-padding-x: $input-padding-x !default;
+$custom-file-padding-y: 0.375rem !default;
